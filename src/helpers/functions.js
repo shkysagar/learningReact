@@ -1,14 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
-const Logout = () => {
+export const RedirectUser = (props) => {
   let navigate = useNavigate();
-  localStorage.removeItem('stack_8_token');
-  //redirect
   useEffect(() => {
-    navigate('/login');
-  }, []);
+    navigate(props.url);
+  }, [props]);
   return <></>;
 };
-
-export default Logout;

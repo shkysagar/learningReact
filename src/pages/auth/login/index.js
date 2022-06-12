@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../../components/header';
 import InputComponent from '../../../components/common/input.component';
-import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../../../services/auth';
 
 const Login = (props) => {
   //state hook
@@ -12,41 +12,30 @@ const Login = (props) => {
   let [password, setPassword] = useState();
 
   let navigate = useNavigate();
-  const submitForm = (e) => {
+
+  const submitForm = async (e) => {
     e.preventDefault();
 
-    axios
-      .post(
-        'https://openapi-ecom.herokuapp.com/api/v1/login',
-        {
-          email: username,
-          password: password,
-        },
-        {
-          headers: {
-            'content-type': 'application/json',
-          },
-        }
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          if (response.data.status) {
-            //success
-            let token = response.data.result.token;
-            localStorage.setItem('stack_8_token', token);
-            toast.success(response.data.msg);
-            navigate('/admin');
-          } else {
-            toast.error(response.data.msg);
-          }
-        }
-        // console.log('Success: ', response);
-      })
-      .catch((error) => {
-        // console.log('Error: ', error);
-        toast.error(error.message);
-      });
+    try {
+      let response = await login(username, password);
+      //dashboard
+      navigate('/admin');
+      toast.success(response.data.msg);
+
+      console.log('response: ', response);
+    } catch (error) {
+      //to do error handle
+      toast.error(error.msg);
+    }
   };
+
+  useEffect(() => {
+    let token = localStorage.getItem('stack_8_token');
+    if (token) {
+      navigate('/admin');
+    }
+  }, []);
+
   return (
     <>
       <Header />
