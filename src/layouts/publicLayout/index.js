@@ -1,5 +1,9 @@
+import {Outlet} from "react-router-dom";
+
 const PublicLayout = () => {
-  return <>private design</>;
+  return (<>
+    <Outlet />
+  </>);
 };
 
 export default PublicLayout;

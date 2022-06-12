@@ -5,7 +5,7 @@ const InputComponent = (props) => {
 
   const handleChange = (e) => {
     let { name, value, required, type } = e.target;
-    console.log(required);
+
     if (required && !value) {
       setErr(name + 'This is error');
     } else {
@@ -15,6 +15,8 @@ const InputComponent = (props) => {
       } else {
         setErr('');
       }
+
+      props.handleChange(value);
     }
   };
   return (
@@ -28,6 +30,7 @@ const InputComponent = (props) => {
         className={props.className ?? ''}
         onChange={handleChange}
       />
+      <br />
       <small>{err}</small>
     </>
   );
